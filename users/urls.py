@@ -4,8 +4,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from users.views import (
     CustomTokenObtainPairView,
     ManageUserView,
-    UserLastActivityView,
     SignupUserView,
+    UserLastActivityView,
 )
 
 
