@@ -50,6 +50,7 @@ class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
+    pseudonym = models.CharField(max_length=255, blank=True)
     last_login_at = models.DateTimeField(null=True, blank=True)
     last_request_at = models.DateTimeField(default=timezone.now)
 
@@ -57,3 +58,9 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    def __str__(self) -> str:
+        if self.pseudonym:
+            return self.pseudonym
+
+        return self.email
