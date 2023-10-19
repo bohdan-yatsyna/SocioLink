@@ -1,9 +1,12 @@
-from django.utils import timezone
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from users.serializers import UserSerializer, UserLastActivitySerializer, CustomTokenObtainPairSerializer
+from users.serializers import (
+    CustomTokenObtainPairSerializer,
+    UserLastActivitySerializer,
+    UserSerializer,
+)
 
 
 class SignupUserView(generics.CreateAPIView):
