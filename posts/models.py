@@ -31,3 +31,6 @@ class Like(models.Model):
         related_name="likes",
     )
     liked_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ["post", "liked_by"]
