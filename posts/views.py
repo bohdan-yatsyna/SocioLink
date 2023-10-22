@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Any
 
 from django.db.models import Count, F
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import (
     extend_schema,
@@ -9,7 +10,9 @@ from drf_spectacular.utils import (
     OpenApiParameter,
     OpenApiResponse,
 )
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, serializers, status
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -199,3 +202,17 @@ class LikeAnalyticsView(APIView):
             )
 
         return Response(list(aggregated_likes))
+
+
+@api_view(["GET"])
+@swagger_auto_schema(
+    operation_description="A simple API health check endpoint",
+    responses={200: 'OK'}
+)
+def health_check(request: HttpRequest) -> HttpResponse:
+    """
+    An endpoint for health checking API.
+    Returns a 200 OK response if the service is up.
+    """
+
+    return HttpResponse("OK")
