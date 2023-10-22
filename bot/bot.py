@@ -78,7 +78,11 @@ def create_post(token: str) -> Dict[str, Any]:
     }
 
     logger.info(f"Creating post: {post_data['title']}")
-    response = requests.post(f"{BASE_URL}/posts/", data=post_data, headers=headers)
+    response = requests.post(
+        f"{BASE_URL}/posts/",
+        data=post_data,
+        headers=headers,
+    )
     post_response = handle_request(response)
     logger.info(f"Post created successfully: {post_data['title']}")
 
@@ -91,7 +95,10 @@ def like_post(token: str, post_id: int):
     }
 
     logger.info(f"Liking post ID: {post_id}")
-    response = requests.post(f"{BASE_URL}/posts/{post_id}/like/", headers=headers)
+    response = requests.post(
+        f"{BASE_URL}/posts/{post_id}/like/",
+        headers=headers,
+    )
     handle_request(response)
     logger.info(f"Post ID {post_id} liked successfully")
 
@@ -104,15 +111,19 @@ def user_imitation_bot() -> None:
         user_data = signup_user()
         access_token = login_user(user_data["email"], user_data["password"])
 
-        for _ in range(random.randint(1, configurations["max_posts_per_user"])):
-            post_data = create_post(access_token)
+        for _ in range(
+                random.randint(1, configurations["max_posts_per_user"])
+        ):
+            create_post(access_token)
 
         logger.info("Fetching all post IDs for like...")
         response = requests.get(f"{BASE_URL}/posts/")
         post_response = handle_request(response)
         post_ids = [post["id"] for post in post_response["results"]]
 
-        for _ in range(random.randint(1, configurations["max_likes_per_user"])):
+        for _ in range(
+                random.randint(1, configurations["max_likes_per_user"])
+        ):
             post_id = random.choice(post_ids)
             like_post(access_token, post_id)
             post_ids.remove(post_id)
