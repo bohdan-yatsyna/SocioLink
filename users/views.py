@@ -36,9 +36,6 @@ class SignupUserView(generics.CreateAPIView):
         description="Endpoint for partial updating "
                     "current User details by id."
     ),
-    delete=extend_schema(
-        description="Endpoint for deleting current User account by id."
-    )
 )
 class ManageUserView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
