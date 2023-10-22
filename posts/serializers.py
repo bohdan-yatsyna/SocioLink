@@ -11,6 +11,8 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class LikeSerializer(serializers.ModelSerializer):
+    liked_by = serializers.ReadOnlyField(source="liked_by.id")
+
     class Meta:
         model = Like
-        fields = ("post", "liked_by", "liked_at")
+        fields = ("post", "liked_by", "liked_date")
