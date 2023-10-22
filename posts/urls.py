@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import PostCreateListView, PostRetrieveUpdateDestroyView, PostLikeView, PostUnlikeView
+from .views import (
+    PostCreateListView,
+    PostLikeView,
+    PostRetrieveUpdateDestroyView,
+    PostUnlikeView,
+)
 
 app_name = "posts"
 
@@ -15,5 +20,5 @@ urlpatterns = [
         "<int:post_id>/unlike/",
         PostUnlikeView.as_view(),
         name="unlike-post",
-    )
+    ),
 ]
