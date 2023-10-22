@@ -110,7 +110,7 @@ def user_imitation_bot() -> None:
         logger.info("Fetching all post IDs for like...")
         response = requests.get(f"{BASE_URL}/posts/")
         post_response = handle_request(response)
-        post_ids = [post["id"] for post in post_response]
+        post_ids = [post["id"] for post in post_response["results"]]
 
         for _ in range(random.randint(1, configurations["max_likes_per_user"])):
             post_id = random.choice(post_ids)
