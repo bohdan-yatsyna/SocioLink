@@ -8,7 +8,7 @@ WORKDIR app/
 COPY requirements.txt requirements.txt
 
 RUN apt-get update \
-    && apt-get -y install libpq-dev gcc
+    && apt-get -y install libpq-dev gcc curl
 
 RUN pip install -r requirements.txt
 
