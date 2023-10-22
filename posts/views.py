@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from django.db.models import Count, F
 from django.shortcuts import get_object_or_404
@@ -10,6 +11,7 @@ from drf_spectacular.utils import (
 )
 from rest_framework import generics, serializers, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -92,7 +94,7 @@ class PostUnlikeView(APIView):
 
     lookup_for_url = "post_id"
 
-    def delete(self, request, *args, **kwargs):
+    def delete(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         post_id = kwargs.get(self.lookup_for_url, None)
 
         try:
@@ -148,7 +150,7 @@ class LikeAnalyticsView(APIView):
 
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """
             Retrieve the number of likes aggregated by day according to
             provided date range. Requires 'date_from' and 'date_to' as
