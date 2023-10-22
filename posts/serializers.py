@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from rest_framework import serializers
 from posts.models import Post, Like
 
@@ -19,5 +21,5 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ("id", "author", "title", "text", "created_at", "likes")
 
     @staticmethod
-    def get_likes(instance):
+    def get_likes(instance: Post) -> int:
         return instance.likes.count()
