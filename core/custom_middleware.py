@@ -10,6 +10,6 @@ class LastUserRequestMiddleware:
 
         if request.user.is_authenticated:
             request.user.last_request_at = timezone.now()
-            request.user.save(update_fields=['last_request_at'])
+            request.user.save(update_fields=["last_request_at"])
 
         return response

@@ -30,7 +30,7 @@ class Like(models.Model):
         on_delete=models.CASCADE,
         related_name="likes",
     )
-    liked_at = models.DateTimeField(auto_now_add=True)
+    liked_date = models.DateField(auto_now_add=True)
 
     class Meta:
         unique_together = ["post", "liked_by"]

@@ -2,6 +2,7 @@ from django.contrib.auth.models import (
     AbstractUser,
     BaseUserManager,
 )
+from django.core.validators import EmailValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -47,7 +48,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(_("email address"), unique=True)
+    email = models.EmailField(
+        _("email address"),
+        unique=True,
+        validators=[EmailValidator(message="Invalid email address")]
+    )
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     pseudonym = models.CharField(max_length=255, blank=True)
