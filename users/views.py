@@ -41,7 +41,7 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
-    def get_object(self):
+    def get_object(self) -> User:
         return self.request.user
 
 
@@ -59,7 +59,7 @@ class UserLastActivityView(generics.RetrieveAPIView):
     serializer_class = UserLastActivitySerializer
     permission_classes = (IsAuthenticated,)
 
-    def get_object(self):
+    def get_object(self) -> User:
         user_id = self.kwargs["user_id"]
         user = get_object_or_404(User, id=user_id)
 
