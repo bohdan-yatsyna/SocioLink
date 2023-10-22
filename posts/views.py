@@ -84,28 +84,37 @@ class PostLikeView(generics.CreateAPIView):
         serializer.save(post=post, liked_by=self.request.user)
 
 
-class PostUnlikeView(generics.DestroyAPIView):
+class PostUnlikeView(APIView):
     """
     View for deleting your Like from Post by id,
     accessible only for authenticated users.
     """
 
-    queryset = Like.objects.select_related("liked_by")
-    lookup_field = "post__id"
-    lookup_url_kwarg = "post_id"
+    lookup_for_url = "post_id"
 
-    def get_object(self):
-        instance = super().get_object()
+    def delete(self, request, *args, **kwargs):
+        post_id = kwargs.get(self.lookup_for_url, None)
 
-        if instance.liked_by != self.request.user:
-            raise serializers.ValidationError(
-                "Impossible to unlike, You haven't liked this post."
+        try:
+            like_instance = Like.objects.get(
+                post__id=post_id,
+                liked_by=request.user,
+            )
+        except Like.DoesNotExist:
+            return Response(
+                {
+                    "error": "Impossible to unlike this post, "
+                             "You haven't liked it yet."
+                },
+                status=status.HTTP_400_BAD_REQUEST
             )
 
-        return instance
+        like_instance.delete()
 
-    def perform_destroy(self, instance):
-        instance.delete()
+        return Response(
+            {"message": "You unliked the post successfully."},
+            status=status.HTTP_200_OK,
+        )
 
 
 # Only for documentation endpoint details
