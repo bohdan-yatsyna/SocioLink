@@ -10,7 +10,7 @@ from typing import Dict, Any
 
 BOT_DIRECTORY = "bot"
 CONFIG_PATH = os.path.join(BOT_DIRECTORY, "config.json")
-BASE_URL = "http://127.0.0.1:8000/api"
+BASE_URL = "http://app:8000/api"
 
 fake = Faker()
 
