@@ -27,8 +27,7 @@ services:
   bot:
     build: .
     command:
-      sh -c "python3 manage.py wait_for_db &&
-            sleep 150 &&
+      sh -c "/app/wait-for-app.sh &&
             python3 /app/bot/bot.py"
     volumes:
       - ./:/app
