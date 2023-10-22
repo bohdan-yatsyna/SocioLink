@@ -23,3 +23,15 @@ services:
       - .env
     depends_on:
       - db
+
+  bot:
+    build: .
+    command:
+      sh -c "python3 manage.py wait_for_db &&
+            sleep 150 &&
+            python3 /app/bot/bot.py"
+    volumes:
+      - ./:/app
+    depends_on:
+      - app
+      - db
