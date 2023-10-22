@@ -1,0 +1,12 @@
+.github
+.idea/
+.vscode/
+*.iml
+.env
+.DS_Store
+venv/
+.pytest_cache/
+.python-version/
+**__pycache__/
+**db.sqlite3
+samples/
