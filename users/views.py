@@ -27,17 +27,17 @@ class SignupUserView(generics.CreateAPIView):
 # Only for documentation endpoints details
 @extend_schema_view(
     get=extend_schema(
-        description="Endpoint with detailed Person page for current user."
+        description="Endpoint with detailed User page for current user."
     ),
     put=extend_schema(
-        description="Endpoint for updating current Person details by id."
+        description="Endpoint for updating current User details by id."
     ),
     patch=extend_schema(
         description="Endpoint for partial updating "
-                    "current Person details by id."
+                    "current User details by id."
     ),
     delete=extend_schema(
-        description="Endpoint for deleting current Person account by id."
+        description="Endpoint for deleting current User account by id."
     )
 )
 class ManageUserView(generics.RetrieveUpdateAPIView):
