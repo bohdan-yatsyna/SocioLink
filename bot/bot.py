@@ -5,6 +5,7 @@ import requests
 import logging
 
 from faker import Faker
+from typing import Dict, Any
 
 
 BOT_DIRECTORY = "bot"
@@ -20,7 +21,7 @@ logging.basicConfig(
 logger = logging.getLogger("BotLogger")
 
 
-def load_configurations(path):
+def load_configurations(path: str) -> Dict[str, Any]:
 
     with open(path, "r") as file:
         return json.load(file)
@@ -29,14 +30,14 @@ def load_configurations(path):
 configurations = load_configurations(CONFIG_PATH)
 
 
-def handle_request(response):
+def handle_request(response: requests.Response) -> Dict[str, Any]:
     """Raise HTTPError in case of 4xx and 5xx responses"""
 
     response.raise_for_status()
     return response.json()
 
 
-def signup_user():
+def signup_user() -> Dict[str, str]:
     user_data = {
         "email": fake.email(),
         "password": fake.password(),
@@ -53,7 +54,7 @@ def signup_user():
     return user_data
 
 
-def login_user(email, password):
+def login_user(email: str, password: str) -> str:
     login_data = {
         "email": email,
         "password": password
@@ -67,7 +68,7 @@ def login_user(email, password):
     return login_response["access"]
 
 
-def create_post(token):
+def create_post(token: str) -> Dict[str, Any]:
     headers = {
         "Authorization": f"Bearer {token}"
     }
@@ -84,7 +85,7 @@ def create_post(token):
     return post_response
 
 
-def like_post(token, post_id):
+def like_post(token: str, post_id: int):
     headers = {
         "Authorization": f"Bearer {token}"
     }
@@ -95,7 +96,7 @@ def like_post(token, post_id):
     logger.info(f"Post ID {post_id} liked successfully")
 
 
-def user_imitation_bot():
+def user_imitation_bot() -> None:
     users_counter = 0
 
     for _ in range(configurations["number_of_users"]):
@@ -109,7 +110,7 @@ def user_imitation_bot():
         logger.info("Fetching all post IDs for like...")
         response = requests.get(f"{BASE_URL}/posts/")
         post_response = handle_request(response)
-        post_ids = [post["id"] for post in post_response]
+        post_ids = [post["id"] for post in post_response["results"]]
 
         for _ in range(random.randint(1, configurations["max_likes_per_user"])):
             post_id = random.choice(post_ids)
@@ -119,7 +120,7 @@ def user_imitation_bot():
         users_counter += 1
         logger.info(f"___Process completed for user №:{users_counter} ___\n")
 
-    logger.info(f"___Process is finished successfully___")
+    logger.info("___Process is finished successfully___")
 
 
 if __name__ == "__main__":
