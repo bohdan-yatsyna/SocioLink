@@ -120,7 +120,7 @@ def user_imitation_bot() -> None:
         users_counter += 1
         logger.info(f"___Process completed for user №:{users_counter} ___\n")
 
-    logger.info(f"___Process is finished successfully___")
+    logger.info("___Process is finished successfully___")
 
 
 if __name__ == "__main__":
