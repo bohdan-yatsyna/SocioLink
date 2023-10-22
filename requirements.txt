@@ -7,6 +7,7 @@ django-filter==23.3
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.3.0
 drf-spectacular==0.26.5
+drf-yasg==1.21.7
 Faker==19.11.0
 flake8==6.1.0
 flake8-variables-names==0.0.6
@@ -16,6 +17,7 @@ jsonschema==4.19.1
 jsonschema-specifications==2023.7.1
 Markdown==3.5
 mccabe==0.7.0
+packaging==23.2
 pep8-naming==0.13.3
 psycopg2-binary==2.9.9
 pycodestyle==2.11.1
