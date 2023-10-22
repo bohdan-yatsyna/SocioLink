@@ -6,6 +6,7 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
     OpenApiParameter,
+    OpenApiResponse,
 )
 from rest_framework import generics, serializers, status
 from rest_framework.permissions import IsAuthenticated
@@ -129,6 +130,9 @@ class PostUnlikeView(generics.DestroyAPIView):
             type=str,
         ),
     ],
+    responses={
+        200: OpenApiResponse(description="List of like annotated per day"),
+    }
 )
 class LikeAnalyticsView(APIView):
     """View for providing like analytics annotated by days"""
