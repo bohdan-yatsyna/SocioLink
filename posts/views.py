@@ -2,6 +2,11 @@ from datetime import datetime
 
 from django.db.models import Count, F
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import (
+    extend_schema,
+    extend_schema_view,
+    OpenApiParameter,
+)
 from rest_framework import generics, serializers, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -12,6 +17,15 @@ from posts.serializers import PostSerializer, LikeSerializer
 from posts.permissions import IsPostAuthorOrReadOnly
 
 
+# Only for documentation endpoints details
+@extend_schema_view(
+    post=extend_schema(
+        description="Endpoint for Post creating by User."
+    ),
+    get=extend_schema(
+        description="Endpoint for listing all the Posts."
+    ),
+)
 class PostCreateListView(generics.ListCreateAPIView):
     queryset = Post.objects.select_related("author")
     serializer_class = PostSerializer
@@ -20,6 +34,30 @@ class PostCreateListView(generics.ListCreateAPIView):
         serializer.save(author=self.request.user)
 
 
+# Only for documentation endpoints details
+@extend_schema_view(
+    get=extend_schema(
+        description="Endpoint with detailed Post page by id. "
+    ),
+    put=extend_schema(
+        description=(
+            "Endpoint for updating current Post details by id. "
+            "Only post author can make it."
+        )
+    ),
+    patch=extend_schema(
+        description=(
+            "Endpoint for partial updating current Post details by id. "
+            "Only post author can make it."
+        )
+    ),
+    delete=extend_schema(
+        description=(
+            "Endpoint for deleting current Post by id. "
+            "Only post author can make it."
+        )
+    )
+)
 class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.select_related("author")
     serializer_class = PostSerializer
@@ -27,6 +65,10 @@ class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PostLikeView(generics.CreateAPIView):
+    """
+    View for liking Post by id, accessible only for authenticated users.
+    """
+
     queryset = Post.objects.select_related("author")
     serializer_class = LikeSerializer
 
@@ -42,6 +84,11 @@ class PostLikeView(generics.CreateAPIView):
 
 
 class PostUnlikeView(generics.DestroyAPIView):
+    """
+    View for deleting your Like from Post by id,
+    accessible only for authenticated users.
+    """
+
     queryset = Like.objects.select_related("liked_by")
     lookup_field = "post__id"
     lookup_url_kwarg = "post_id"
@@ -60,6 +107,29 @@ class PostUnlikeView(generics.DestroyAPIView):
         instance.delete()
 
 
+# Only for documentation endpoint details
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="date_from",
+            description=(
+                "Parameter for start date in likes filtering "
+                "(ex. '2023-10-21')."
+            ),
+            required=True,
+            type=str,
+        ),
+        OpenApiParameter(
+            name="date_to",
+            description=(
+                "Parameter for end date in likes filtering "
+                "(ex. '2023-10-22')."
+            ),
+            required=True,
+            type=str,
+        ),
+    ],
+)
 class LikeAnalyticsView(APIView):
     """View for providing like analytics annotated by days"""
 
