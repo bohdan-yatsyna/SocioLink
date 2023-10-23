@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict
 
 from django.db.models import Count, F
 from django.http import HttpResponse, HttpRequest
@@ -11,11 +11,12 @@ from drf_spectacular.utils import (
     OpenApiResponse,
 )
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, serializers, status
+from rest_framework import generics, status, mixins
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 from rest_framework.views import APIView
 
 from posts.models import Post, Like
@@ -70,56 +71,49 @@ class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsPostAuthorOrReadOnly,)
 
 
-class PostLikeView(generics.CreateAPIView):
+class PostLikeUnlikeView(
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView,
+):
     """
-    View for liking Post by id, accessible only for authenticated users.
-    """
-
-    queryset = Post.objects.select_related("author")
-    serializer_class = LikeSerializer
-
-    def perform_create(self, serializer):
-        post = get_object_or_404(Post, pk=self.kwargs["post_id"])
-
-        if Like.objects.filter(post=post, liked_by=self.request.user).exists():
-            raise serializers.ValidationError(
-                "You've already liked this post before."
-            )
-
-        serializer.save(post=post, liked_by=self.request.user)
-
-
-class PostUnlikeView(APIView):
-    """
-    View for deleting your Like from Post by id,
+    View for liking Post by id and deleting your own Likes from Post by id,
     accessible only for authenticated users.
     """
 
-    lookup_for_url = "post_id"
+    queryset = Like.objects.select_related("post", "liked_by")
+    serializer_class = LikeSerializer
+
+    def get_object(self) -> Like:
+        post = get_object_or_404(Post, pk=self.kwargs["post_id"])
+
+        return get_object_or_404(Like, post=post, liked_by=self.request.user)
+
+    def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        post = get_object_or_404(Post, pk=self.kwargs["post_id"])
+
+        if Like.objects.filter(post=post, liked_by=request.user).exists():
+            return Response(
+                {"detail": "You've already liked this post before."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer: BaseSerializer) -> None:
+        post = get_object_or_404(Post, pk=self.kwargs["post_id"])
+        serializer.save(post=post, liked_by=self.request.user)
 
     def delete(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        post_id = kwargs.get(self.lookup_for_url, None)
 
-        try:
-            like_instance = Like.objects.get(
-                post__id=post_id,
-                liked_by=request.user,
-            )
-        except Like.DoesNotExist:
-            return Response(
-                {
-                    "error": "Impossible to unlike this post, "
-                             "You haven't liked it yet."
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        return self.destroy(request, *args, **kwargs)
 
-        like_instance.delete()
+    def get_serializer_context(self) -> Dict[str, Any]:
+        context = super().get_serializer_context()
+        post = get_object_or_404(Post, pk=self.kwargs["post_id"])
+        context["post"] = post
 
-        return Response(
-            {"message": "You unliked the post successfully."},
-            status=status.HTTP_200_OK,
-        )
+        return context
 
 
 # Only for documentation endpoint details
@@ -159,6 +153,7 @@ class LikeAnalyticsView(APIView):
             provided date range. Requires 'date_from' and 'date_to' as
             query parameters in the format YYYY-MM-DD.
         """
+
         date_from = self.request.query_params.get("date_from")
         date_to = self.request.query_params.get("date_to")
 
