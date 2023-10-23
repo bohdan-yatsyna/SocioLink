@@ -92,9 +92,9 @@ class PostLikeUnlikeView(
     # Only for documentation endpoints details
     @extend_schema(
         description=(
-                "Endpoint for liking a post by id."
-                "If the post is already liked by the user, "
-                "it will return an error."
+            "Endpoint for liking a post by id."
+            "If the post is already liked by the user, "
+            "it will return an error."
         ),
         request=None,
         responses={
