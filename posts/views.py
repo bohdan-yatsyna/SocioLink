@@ -89,6 +89,19 @@ class PostLikeUnlikeView(
 
         return get_object_or_404(Like, post=post, liked_by=self.request.user)
 
+    # Only for documentation endpoints details
+    @extend_schema(
+        description=(
+                "Endpoint for liking a post by id."
+                "If the post is already liked by the user, "
+                "it will return an error."
+        ),
+        request=None,
+        responses={
+            201: LikeSerializer,
+            400: "You've already liked this post before.",
+        }
+    )
     def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         post = get_object_or_404(Post, pk=self.kwargs["post_id"])
 
@@ -104,16 +117,20 @@ class PostLikeUnlikeView(
         post = get_object_or_404(Post, pk=self.kwargs["post_id"])
         serializer.save(post=post, liked_by=self.request.user)
 
+    @extend_schema(
+        description=(
+            "Endpoint for unliking a post by ID "
+            "if this Post has been liked by the user."
+        ),
+        request=None,
+        responses={
+            201: LikeSerializer,
+            400: "You've already liked this post before.",
+        }
+    )
     def delete(self, request: Request, *args: Any, **kwargs: Any) -> Response:
 
         return self.destroy(request, *args, **kwargs)
-
-    def get_serializer_context(self) -> Dict[str, Any]:
-        context = super().get_serializer_context()
-        post = get_object_or_404(Post, pk=self.kwargs["post_id"])
-        context["post"] = post
-
-        return context
 
 
 # Only for documentation endpoint details
