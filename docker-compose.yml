@@ -23,7 +23,6 @@ services:
       - .env
     depends_on:
       - db
-
   bot:
     build: .
     command:

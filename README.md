@@ -48,7 +48,7 @@ docker-compose up --build
 - And open in your browser "http://127.0.0.1:8000/"
 
 ####  !!! Note, test data will be automatically loaded to the database !!!
-### Feel free to use next admin user credentials to test my app:
+### Feel free to use next user credentials to test my app:
 ```shell
 email: admin@admin.com
 password: TestOne1.
