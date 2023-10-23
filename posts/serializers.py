@@ -8,8 +8,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Like
-        fields = ("post", "liked_by", "liked_date")
-        read_only_fields = ("post", "liked_by", "liked_date")
+        fields = []
 
 
 class PostSerializer(serializers.ModelSerializer):
