@@ -59,8 +59,8 @@ password: TestOne1.
 - Enter it to the next command and run ```docker exec -it <container_id> python manage.py createsuperuser```  
 
 #### 🗝 For creating standard user next endpoints will help:  
-- **User creating** - send a POST request to /api/persons/register/ 
-- **Obtain token** - send a POST request to /api/persons/login/
+- **User creating** - send a POST request to /api/users/signup/
+- **Obtain token** - send a POST request to /api/users/login/
 
 #### 🗝 For Authorization:
 - Install **ModHeader** extension and create Request header "Authorize" with value: Bearer &lt;Your access token&gt;
