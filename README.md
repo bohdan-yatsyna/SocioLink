@@ -65,6 +65,8 @@ password: TestOne1.
 #### 🗝 For Authorization:
 - Install **ModHeader** extension and create Request header "Authorize" with value: Bearer &lt;Your access token&gt;
 
+#### 🗝 For Bot parametrization:
+- Change bot/config.json with appreciable parameters
 
 # 🕶 DEMO
 ### Documentation with all endpoints:

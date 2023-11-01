@@ -3,7 +3,8 @@ from .views import (
     PostCreateListView,
     PostRetrieveUpdateDestroyView,
     health_check,
-    PostLikeUnlikeView,
+    PostLikeView,
+    PostUnlikeView,
 )
 
 app_name = "posts"
@@ -15,10 +16,11 @@ urlpatterns = [
         PostRetrieveUpdateDestroyView.as_view(),
         name="post-detail-update-delete",
     ),
+    path("<int:post_id>/like/", PostLikeView.as_view(), name="like-post"),
     path(
-        "<int:post_id>/like/",
-        PostLikeUnlikeView.as_view(),
-        name="like-unlike-post",
+        "<int:post_id>/unlike/",
+        PostUnlikeView.as_view(),
+        name="unlike-post",
     ),
     path("health/", health_check, name="api-health-check"),
 ]

@@ -5,6 +5,7 @@ from django.utils import timezone
 
 
 class LastUserRequestMiddleware:
+
     def __init__(self, get_response: Callable) -> Callable:
         self.get_response = get_response
 

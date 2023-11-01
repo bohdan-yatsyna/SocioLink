@@ -9,6 +9,7 @@ from users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = get_user_model()
         fields = (
@@ -42,6 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+
     def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
         data = super().validate(attrs)
 
@@ -52,6 +54,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class UserLastActivitySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = get_user_model()
         fields = (
