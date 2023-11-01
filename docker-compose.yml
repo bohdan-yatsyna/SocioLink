@@ -26,7 +26,8 @@ services:
   bot:
     build: .
     command:
-      sh -c "/app/wait-for-app.sh &&
+      sh -c "chmod +x /app/wait-for-app.sh &&
+            /app/wait-for-app.sh &&
             python3 /app/bot/bot.py"
     volumes:
       - ./:/app
