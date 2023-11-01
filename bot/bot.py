@@ -112,7 +112,7 @@ def like_post(token: str, post_id: int) -> None:
     logger.info(f"Post ID {post_id} liked successfully")
 
 
-def imitate_user_activity() -> None:
+def simulate_user_activity() -> None:
     users_counter = 0
 
     for _ in range(CONFIGURATIONS["number_of_users"]):
@@ -144,4 +144,4 @@ def imitate_user_activity() -> None:
 
 
 if __name__ == "__main__":
-    imitate_user_activity()
+    simulate_user_activity()
